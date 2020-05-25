@@ -9,15 +9,14 @@ import sys
 import math
 
 
-def split_list(data_list, max_size):
+def split_list(data_list, max_size, file_size):
 
 
     splits = []
 
-    amount_splits = math.ceil(max_size/sys.getsizeof(data_list))
+    amount_splits = math.ceil(max_size/file_size)
 
     split_index = math.ceil(len(data_list)/amount_splits)
-
 
     for split in range(0, amount_splits):
 
@@ -33,7 +32,7 @@ def write_splitted_files(data_splits, file_name, path_file):
 
     for index, split in enumerate(data_splits):
 
-        with open(os.path.join(path_file,file_prefix + '_part_' + str(index) + '.txt'), 'w') as output_file:
+        with open(os.path.join(path_file, file_prefix + '_part_' + str(index) + '.txt'), 'w') as output_file:
 
             output_file.write('\n'.join(split) + '\n')
 
@@ -47,7 +46,7 @@ def define_path(path_file):
     return path_file
 
 
-def split_files(path_file=None, file_size=1e+8, file_name=None):
+def split_files(path_file=None, file_size=1e+6, file_name=None):
 
     path_file = define_path(path_file)
 
@@ -74,7 +73,7 @@ def split_files(path_file=None, file_size=1e+8, file_name=None):
 
             data_list = split_file.read().split('\n')
 
-            data_splits = split_list(data_list, file_size)
+            data_splits = split_list(data_list, file_size, measure_size(os.path.join(path_file, file)))
 
             write_splitted_files(data_splits, file, path_file)
 
